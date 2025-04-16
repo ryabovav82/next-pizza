@@ -1,6 +1,6 @@
 import React from 'react';
 import {cn} from "@/lib/utils";
-import {Container} from "@/shared/container";
+import {Container} from "@/components/shared/container";
 import {Button} from "@/components/ui";
 import {User} from "lucide-react";
 import {ShoppingCart, ArrowRight} from "lucide-react";
