@@ -48,7 +48,7 @@ export default function Home() {
                   },
                 ]} categoryId={1} />
 
-<ProductsGroupList title="Завтрак" items={[
+<ProductsGroupList title="Комбо" items={[
                   {
                     id: 1,
                     name: 'Чисбургер пицца',
