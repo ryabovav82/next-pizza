@@ -14,10 +14,10 @@ model User {
   fullName String
   email    String   @unique
   password String
-  role     UserRole @default(USER)
   verified DateTime
+  role     UserRole @default(USER)
 
-  provider   String?
+  provider String?
   providerId String?
 
   createdAt DateTime @default(now())
@@ -46,10 +46,8 @@ model Product {
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // ingredient   Ingredient?   @relation(fields: [ingredientId], references: [id])
-  // ingredientId Int?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model ProductItem {
@@ -59,9 +57,9 @@ model ProductItem {
   size      Int?
   pizzaType Int?
 
-  product   Product    @relation(fields: [poductId], references: [id])
-  poductId  Int
-  CartItems CartItem[]
+  product   Product    @relation(fields: [productId], references: [id])
+  productId  Int
+  cartItems CartItem[]
 }
 
 model Ingredient {
@@ -74,10 +72,8 @@ model Ingredient {
   products  Product[]
   cartItems CartItem[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  // cartItem   CartItem? @relation(fields: [cartItemId], references: [id])
-  // cartItemId Int?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 }
 
 model Cart {
@@ -92,9 +88,9 @@ model Cart {
 
   totalAmount Int @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Order     Order[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  order     Order[]
 }
 
 model CartItem {
@@ -147,8 +143,6 @@ model VerificationCode {
   code String
 
   createdAt DateTime @default(now())
-
-  @@unique([userId, code])
 }
 
 enum OrderStatus {
