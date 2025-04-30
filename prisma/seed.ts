@@ -2,6 +2,7 @@ import {prisma} from "../prisma/prisma-client";
 import { hashSync } from 'bcrypt';
 import { categories, ingredients, products } from "./constans";
 import { Prisma } from "@prisma/client";
+import { connect } from "http2";
 
 const randomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min) *10 + min *10) /10;
@@ -102,7 +103,33 @@ async function up () {
             generateProductItem({ productId: 2}),
             generateProductItem({ productId: 3}),
         ]
-    })
+    });
+
+    await prisma.cart.createMany ({
+        data: [
+            {
+                userId: 1,
+                totalAmount: 0,
+                token: '11111'
+            },
+            {
+                userId: 2,
+                totalAmount: 0,
+                token: '22222'
+            },
+        ]
+    });
+
+    await prisma.cartItem.create ({
+        data: {
+                productItemId: 1,
+                cartId: 1,
+                quantity: 2,
+                ingredients: {
+                    connect: [{id: 1}, {id: 2}, {id: 3}, {id: 4}],
+                },
+             },
+    });
 }
 
 async function down () {
@@ -111,6 +138,8 @@ async function down () {
     await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE`;
     await prisma.$executeRaw`TRUNCATE TABLE "ProductItem" RESTART IDENTITY CASCADE`;
     await prisma.$executeRaw`TRUNCATE TABLE "Ingredient" RESTART IDENTITY CASCADE`;
+    await prisma.$executeRaw`TRUNCATE TABLE "Cart" RESTART IDENTITY CASCADE`;
+    await prisma.$executeRaw`TRUNCATE TABLE "CartItem" RESTART IDENTITY CASCADE`;
 }
 
 async function main () {
