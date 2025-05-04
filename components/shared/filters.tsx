@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import {cn} from "@/lib/utils";
 import { Title } from './title';
@@ -5,21 +7,33 @@ import {FilterCheckbox} from "@/components/shared/filter-checkbox";
 import {Input} from "@/components/ui/input";
 import {RangeSlider} from "@/components/ui";
 import {CheckboxFiltersGroup} from "@/components/shared/checkbox-filter-group";
+import {useFilterIngredients} from "@/hooks/useFilterIngredients";
 
 
-interface FiltersProps {
+interface Props {
     className?: string;
 }
 
-export const Filters: React.FC<FiltersProps> = ({className}) => {
+interface PriceProps {
+    priseFrom: number;
+    priseTo: number;
+}
+
+export const Filters: React.FC<Props> = ({className}) => {
+
+    const { ingredients, loading, onAddId, selectedIds } = useFilterIngredients();
+    const [price, setPrice] = React.useState<PriceProps>({ priseFrom: 0, priseTo: 5000 });
+
+    const items = ingredients.map((item) => ({value: String(item.id), text: item.name}));
+
     return (
         <div className={cn("", className)}>
             <Title text="Фильтрация" size="sm" className="mb-5 font-bold"></Title>
 
             {/*Верхние чекбоксы*/}
             <div className="flex flex-col gap-4">
-                <FilterCheckbox text="Можно собирать" value="1" />
-                <FilterCheckbox text="Новинки" value="2" />
+                <FilterCheckbox name='123' text="Можно собирать" value="1" />
+                <FilterCheckbox name='456' text="Новинки" value="2" />
             </div>
 
             {/*Фильтр цен*/}
@@ -33,73 +47,15 @@ export const Filters: React.FC<FiltersProps> = ({className}) => {
             </div>
 
             <CheckboxFiltersGroup
+                loading={loading}
+                name='ingredients'
                 title="Ингредиенты"
                 className="mt-5"
                 limit={6}
-                defaultItems={[
-                    {
-                        text: 'Моццарелла',
-                        value: '2'
-                    },
-                    {
-                        text: 'Чеснок',
-                        value: '3'
-                    },
-                    {
-                        text: 'Соленые огурчики',
-                        value: '4'
-                    },
-                    {
-                        text: 'Красный лук',
-                        value: '5'
-                    },
-                    {
-                        text: 'Томаты',
-                        value: '6'
-                    }
-                ]}
-                items={[
-                    {
-                        text: 'Моццарелла',
-                        value: '2'
-                    },
-                    {
-                        text: 'Чеснок',
-                        value: '3'
-                    },
-                    {
-                        text: 'Соленые огурчики',
-                        value: '4'
-                    },
-                    {
-                        text: 'Красный лук',
-                        value: '5'
-                    },
-                    {
-                        text: 'Томаты',
-                        value: '6'
-                    },
-                    {
-                        text: 'Моццарелла',
-                        value: '2'
-                    },
-                    {
-                        text: 'Чеснок',
-                        value: '3'
-                    },
-                    {
-                        text: 'Соленые огурчики',
-                        value: '4'
-                    },
-                    {
-                        text: 'Красный лук',
-                        value: '5'
-                    },
-                    {
-                        text: 'Томаты',
-                        value: '6'
-                    }
-                ]}
+                defaultItems={items.slice(0, 6)}
+                items={items}
+                onClickCheckbox={onAddId}
+                selectedIds={selectedIds}
             />
 
         </div>
